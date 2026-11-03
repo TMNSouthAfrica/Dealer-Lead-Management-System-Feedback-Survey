@@ -16,6 +16,9 @@ window.SURVEY_CONFIG = {
 
   SURVEY_ID: "mahindra-dealer-lms-feedback-2026",
 
+  // Shown in the POPIA privacy notice (same contact as the Test Drive survey).
+  PRIVACY_EMAIL: "privacy@mahindra.co.za",
+
   // Source: Mahindra_Store_Locator_Info.xlsx (Mahindra store locator, 104 entries).
   DEALERSHIPS: [
     "Mahindra Alberton",

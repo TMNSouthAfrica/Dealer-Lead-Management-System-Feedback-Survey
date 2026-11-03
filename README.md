@@ -4,6 +4,10 @@ Mobile-first landing page survey for Mahindra South Africa dealerships, built fr
 *Dealer Lead Management System Feedback Survey* brief. It is designed to be opened from a
 WhatsApp link and completed in 2–3 minutes.
 
+The look follows Mahindra South Africa's existing Test Drive Experience Survey: red header bar
+with logo, white card, Inter font, primary red `#E31837`, a POPIA privacy notice and a required
+consent checkbox on the landing screen.
+
 No build step or framework: plain HTML, CSS and JavaScript. Host the folder on any static
 host (GitHub Pages, Netlify, Vercel, S3, an existing web server).
 
@@ -11,7 +15,7 @@ host (GitHub Pages, Netlify, Vercel, S3, an existing web server).
 
 | Step | Content | Type |
 |------|---------|------|
-| Intro | Purpose, 7 questions, 2–3 min | — |
+| Intro | Logo, purpose, date, duration and question count, POPIA notice | Required consent checkbox |
 | About you | Dealership, LMS currently used (+ "Other" box) | Drop-downs |
 | Q1 | How easy do you find the LMS to use? | 5-point scale |
 | Q2 | Does the system provide all the functionality you need? | 4-point scale |
@@ -30,6 +34,7 @@ required, and the respondent can go back to change it.
 
 - `DEALERSHIPS`: the 104 dealerships from the Mahindra store locator list (`Mahindra_Store_Locator_Info.xlsx`). The page adds a search box above the drop-down.
 - `LMS_OPTIONS`: **replace the placeholders** with the systems in use. "Other" is added automatically.
+- `PRIVACY_EMAIL`: contact shown in the privacy notice (default `privacy@mahindra.co.za`).
 - `SUBMIT_URL`: the endpoint that receives responses. When it is empty the page runs in demo
   mode: the response is logged to the browser console and kept in `localStorage`.
 
@@ -44,6 +49,7 @@ compared across systems and dealerships:
 - `q4_challenges` (semicolon list), `q4_other_text`, and one 0/1 column per challenge
   (`q4_difficult_to_navigate`, `q4_slow_performance_or_technical_issues`, …) for easy counting
 - `q6_improvement`, `q7_benefit`, `q7_benefit_other`, `q7_reason_no`
+- `popia_consent` (Yes), `popia_consent_at` (timestamp)
 - `response_id`, `submitted_at`, `survey_id`, `ref`, `phone`, `user_agent`
 
 ### Google Sheets (recommended)
@@ -79,3 +85,9 @@ Then open http://localhost:8080.
 3. Click **Deploy**. Every push to the production branch redeploys automatically; other branches get preview URLs.
 
 `vercel.json` turns off search indexing and caching of `config.js`/`app.js`, so list and endpoint changes go live immediately.
+
+## Brand assets
+
+`assets/mahindra-logo.png` is an interim logo taken from a screenshot of the Test Drive survey.
+Replace it with the official high-resolution logo (transparent PNG or SVG) under the same file
+name. No code changes are needed.

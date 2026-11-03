@@ -91,7 +91,9 @@
     q7_benefit: "",
     q7_benefit_other: "",
     q7_reason_no: "",
+    popia_consent: false,
   };
+  var consentAt = "";
 
   // Optional prefill from the WhatsApp link, e.g. ?dealer=...&lms=...&ref=...
   if (params.get("dealer") && (CFG.DEALERSHIPS || []).indexOf(params.get("dealer")) > -1) {
@@ -115,6 +117,60 @@
   var backBtn = $("backBtn");
   var nextBtn = $("nextBtn");
   var errorEl = $("errorMsg");
+
+  var ICON = {
+    clock: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>',
+    file: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>',
+    shield: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
+    check: '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>',
+  };
+
+  function nowLabel() {
+    var d = new Date();
+    try {
+      var date = d.toLocaleDateString("en-ZA", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+      var time = d.toLocaleTimeString("en-ZA", { hour: "2-digit", minute: "2-digit", hour12: false });
+      return date + " at " + time;
+    } catch (e) { return d.toString(); }
+  }
+
+  function introHtml() {
+    var email = CFG.PRIVACY_EMAIL || "privacy@mahindra.co.za";
+    return (
+      '<div class="intro">' +
+      '<img class="intro__logo" src="assets/mahindra-logo.png" alt="Mahindra">' +
+      '<h1 class="intro__title">Dealer Lead Management System Survey</h1>' +
+      '<p class="intro__brand">Mahindra South Africa</p>' +
+      '<p class="intro__text">Thank you for taking part. Your feedback on the Lead Management System your dealership uses helps us improve lead handling, training and system support across the dealer network.</p>' +
+      '<div class="chip">' + ICON.clock + "<span>" + esc(nowLabel()) + "</span></div>" +
+      '<div class="tiles">' +
+      '<div class="tile">' + ICON.clock + '<div class="tile__label">Duration</div><div class="tile__value">2-3 minutes</div></div>' +
+      '<div class="tile">' + ICON.file + '<div class="tile__label">Questions</div><div class="tile__value">' + QUESTIONS.length + ' short questions</div></div>' +
+      "</div>" +
+      '<div class="notice">' +
+      '<p class="notice__title">' + ICON.shield + "Privacy Notice (POPIA Compliance)</p>" +
+      "<p>In accordance with the <strong>Protection of Personal Information Act (POPIA)</strong>, we are committed to protecting your personal information and your right to privacy.</p>" +
+      "<h3>What we collect:</h3><ul>" +
+      "<li>Your dealership and the Lead Management System it uses</li>" +
+      "<li>Your ratings and feedback responses</li>" +
+      "<li>Date and time the survey was completed</li>" +
+      "<li>Device and browser used to complete the survey</li></ul>" +
+      "<h3>How we use your information:</h3><ul>" +
+      "<li>To assess and improve the lead management systems and processes used by dealers</li>" +
+      "<li>To identify training, support and system enhancement needs</li>" +
+      "<li>To generate statistical reports comparing systems and dealerships</li>" +
+      "<li>To follow up on issues raised in your feedback</li></ul>" +
+      "<h3>Your rights:</h3><ul>" +
+      "<li>You may request access to your personal information</li>" +
+      "<li>You may request correction or deletion of your information</li>" +
+      "<li>You may withdraw consent at any time by contacting us</li></ul>" +
+      '<small>For queries about your personal information, contact Mahindra South Africa at<br><a href="mailto:' + esc(email) + '">' + esc(email) + "</a></small>" +
+      "</div>" +
+      '<label class="consent"><input type="checkbox" name="popia_consent"' + (answers.popia_consent ? " checked" : "") + ">" +
+      "<span><strong>Required:</strong> I have read and understand the Privacy Notice. I consent to Mahindra South Africa collecting, processing, and storing my feedback in accordance with POPIA for the purposes described above.</span></label>" +
+      "</div>"
+    );
+  }
 
   /* ------------------------------------------------------------------ *
    * Rendering helpers
@@ -178,11 +234,7 @@
     errorEl.textContent = "";
 
     if (s.type === "intro") {
-      html =
-        '<p class="eyebrow">Lead Management System Survey</p>' +
-        '<h1 class="qtitle qtitle--lg">Help us improve how leads are managed at your dealership</h1>' +
-        '<p class="lead">We would like your honest feedback on the Lead Management System (LMS) your dealership uses — how easy it is, what works, and what could be better.</p>' +
-        '<ul class="meta"><li><strong>7</strong> quick questions</li><li><strong>2–3</strong> minutes</li><li><strong>Confidential</strong></li></ul>';
+      html = introHtml();
     } else if (s.type === "context") {
       html =
         '<p class="eyebrow">About you</p>' +
@@ -195,8 +247,8 @@
         otherBox("lms_other", answers.lms_other, answers.lms === OTHER, "Name of the system");
     } else if (s.type === "done") {
       html =
-        '<div class="done"><div class="done__icon" aria-hidden="true">✓</div>' +
-        '<h1 class="qtitle qtitle--lg">Thank you!</h1>' +
+        '<div class="done"><div class="done__icon">' + ICON.check + '</div>' +
+        '<h1 class="qtitle">Thank you!</h1>' +
         '<p class="lead">Your feedback has been received. It will help Mahindra South Africa improve lead management, training and system support across the dealer network.</p>' +
         '<p class="hint">You can now close this page and return to WhatsApp.</p></div>';
     } else {
@@ -236,7 +288,10 @@
     backBtn.hidden = current === 0 || s.type === "done";
     nextBtn.hidden = s.type === "done";
     nextBtn.textContent =
-      s.type === "intro" ? "Start survey" : current === screens.length - 2 ? "Submit" : "Next";
+      s.type === "intro" ? "Start Survey" : current === screens.length - 2 ? "Submit" : "Next";
+
+    $("progressWrap").hidden = s.type === "intro" || s.type === "done";
+    $("finePrint").textContent = s.type === "intro" ? "By proceeding, you confirm that you work at a Mahindra dealership." : "";
 
     var step = Math.min(Math.max(current, 0), STEP_COUNT);
     $("progressBar").style.width = (s.type === "done" ? 100 : (step / STEP_COUNT) * 100) + "%";
@@ -268,6 +323,12 @@
     var name = t.name;
     if (!name) return;
     errorEl.textContent = "";
+
+    if (name === "popia_consent") {
+      answers.popia_consent = t.checked;
+      consentAt = t.checked ? new Date().toISOString() : "";
+      return;
+    }
 
     if (t.type === "checkbox") {
       var q = QUESTIONS.filter(function (x) { return x.id === name; })[0];
@@ -323,6 +384,7 @@
 
   function validate() {
     var s = screens[current];
+    if (s.type === "intro" && !answers.popia_consent) return "Please accept the Privacy Notice to start the survey.";
     var trim = function (v) { return (v || "").trim(); };
     if (s.type === "context") {
       if (!answers.dealership) return "Please select your dealership.";
@@ -406,6 +468,8 @@
     rec.q7_benefit_other = yes && answers.q7_benefit === OTHER ? answers.q7_benefit_other.trim() : "";
     rec.q7_reason_no = no ? answers.q7_reason_no.trim() : "";
     // Tracking fields passed through the WhatsApp link (optional).
+    rec.popia_consent = answers.popia_consent ? "Yes" : "No";
+    rec.popia_consent_at = consentAt;
     rec.ref = params.get("ref") || "";
     rec.phone = params.get("phone") || params.get("wa") || "";
     rec.user_agent = navigator.userAgent;
@@ -461,5 +525,6 @@
       });
   }
 
+  $("year").textContent = new Date().getFullYear();
   render();
 })();
