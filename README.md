@@ -71,3 +71,11 @@ python3 -m http.server 8080
 ```
 
 Then open http://localhost:8080.
+
+## Deploying to Vercel
+
+1. In Vercel go to **Add New… → Project** and import this GitHub repository.
+2. Framework preset: **Other**. Leave the build command and output directory empty (it's a static site).
+3. Click **Deploy**. Every push to the production branch redeploys automatically; other branches get preview URLs.
+
+`vercel.json` turns off search indexing and caching of `config.js`/`app.js`, so list and endpoint changes go live immediately.
