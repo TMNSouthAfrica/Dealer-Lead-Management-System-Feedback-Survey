@@ -88,6 +88,6 @@ Then open http://localhost:8080.
 
 ## Brand assets
 
-`assets/mahindra-logo.png` is an interim logo taken from a screenshot of the Test Drive survey.
-Replace it with the official high-resolution logo (transparent PNG or SVG) under the same file
-name. No code changes are needed.
+`assets/mahindra-logo.png` is a transparent version of the official logo (`Mahindra logo (1).jpg`),
+used in the red header bar and on the landing card. To change the logo, replace that PNG and keep
+the file name.
