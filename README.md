@@ -28,7 +28,7 @@ required, and the respondent can go back to change it.
 
 ## Configuration (`config.js`)
 
-- `DEALERSHIPS`: **replace the placeholders** with the dealer network list.
+- `DEALERSHIPS`: the 104 dealerships from the Mahindra store locator list (`Mahindra_Store_Locator_Info.xlsx`). The page adds a search box above the drop-down.
 - `LMS_OPTIONS`: **replace the placeholders** with the systems in use. "Other" is added automatically.
 - `SUBMIT_URL`: the endpoint that receives responses. When it is empty the page runs in demo
   mode: the response is logged to the browser console and kept in `localStorage`.
@@ -58,7 +58,7 @@ also works. The body is sent as `text/plain` so the browser skips a CORS preflig
 ## WhatsApp link parameters (optional)
 
 ```
-https://your-host/survey/?dealer=Dealership%201&lms=LMS%201&ref=wave1&phone=27821234567
+https://your-host/survey/?dealer=Mahindra%20Polokwane&lms=LMS%201&ref=wave1&phone=27821234567
 ```
 
 - `dealer` / `lms`: pre-select the drop-downs. They must exactly match an entry in `config.js`.
