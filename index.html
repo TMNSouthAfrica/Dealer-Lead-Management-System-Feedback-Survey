@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#c8102e">
+  <meta name="robots" content="noindex">
+  <title>Dealer LMS Feedback Survey</title>
+  <meta property="og:title" content="Dealer Lead Management System Feedback Survey">
+  <meta property="og:description" content="7 quick questions · about 2–3 minutes">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="brand">
+      <div class="brand__mark" aria-hidden="true">M</div>
+      <div>
+        <div class="brand__name">Mahindra South Africa</div>
+        <div class="brand__sub">Dealer Network Feedback</div>
+      </div>
+    </header>
+
+    <div class="progress" aria-hidden="true"><div class="progress__bar" id="progressBar"></div></div>
+    <p class="progress__label" id="progressLabel" aria-live="polite"></p>
+
+    <form id="survey" novalidate>
+      <!-- Screens are rendered by app.js -->
+      <section class="card" id="screen" tabindex="-1"></section>
+
+      <nav class="actions">
+        <button type="button" class="btn btn--ghost" id="backBtn">Back</button>
+        <button type="submit" class="btn btn--primary" id="nextBtn">Start</button>
+      </nav>
+      <p class="error" id="errorMsg" role="alert"></p>
+    </form>
+
+    <footer class="foot">Your feedback is confidential and used only to improve lead management across the dealer network.</footer>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
