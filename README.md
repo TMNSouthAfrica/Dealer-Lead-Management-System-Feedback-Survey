@@ -65,6 +65,7 @@ compared across systems and dealerships:
 - `has_negative_feedback` (Yes/No): any negative answer, or "No" on Q7, for easy follow-up filtering
 - `q6_improvement`, `q7_benefit`, `q7_benefit_other`, `q7_reason_no`
 - `popia_consent` (Yes), `popia_consent_at` (timestamp)
+- `app_version`: which release of the page sent the response
 - `response_id`, `submitted_at`, `survey_id`, `ref`, `phone`, `user_agent`
 
 ### Google Sheets (recommended)

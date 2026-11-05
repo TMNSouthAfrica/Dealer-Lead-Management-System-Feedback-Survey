@@ -2,6 +2,8 @@
   "use strict";
 
   var CFG = window.SURVEY_CONFIG || {};
+  // Bump together with the ?v= tags in index.html on every release.
+  var APP_VERSION = "2026.11.05-2";
   var OTHER = "Other";
 
   /* ------------------------------------------------------------------ *
@@ -527,6 +529,7 @@
     var rec = {
       response_id: uuid(),
       survey_id: CFG.SURVEY_ID || "",
+      app_version: APP_VERSION,
       submitted_at: new Date().toISOString(),
       name_surname: answers.name_surname.trim().replace(/\s+/g, " "),
       designation: answers.designation === OTHER ? "Other: " + answers.designation_other.trim() : answers.designation,
