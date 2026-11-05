@@ -3,7 +3,7 @@
 
   var CFG = window.SURVEY_CONFIG || {};
   // Bump together with the ?v= tags in index.html on every release.
-  var APP_VERSION = "2026.11.05-2";
+  var APP_VERSION = "2026.11.05-3";
   var OTHER = "Other";
 
   /* ------------------------------------------------------------------ *
@@ -559,12 +559,20 @@
     rec.q7_benefit = yes ? answers.q7_benefit : "";
     rec.q7_benefit_other = yes && answers.q7_benefit === OTHER ? answers.q7_benefit_other.trim() : "";
     rec.q7_reason_no = no ? answers.q7_reason_no.trim() : "";
-    // Comments captured on negative answers (blank when the answer wasn't negative).
+    // Comment fields. For Q1–Q3 (Usability, System Functionality, Lead Tracking)
+    // the comment field always holds the selected option, followed by the typed
+    // comment when one was given: e.g. "Easy" or "Very difficult - too many clicks".
+    // Other comment fields only hold the typed comment on a negative answer.
+    var ALWAYS_FILLED = ["q1_comment", "q2_comment", "q3_comment"];
     var anyNeg = false;
     NEG_QUESTIONS.forEach(function (q) {
+      var key = commentKey(q);
       var neg = isNegative(q, answers[q.id]);
+      var typed = neg ? answers[key].trim() : "";
       anyNeg = anyNeg || neg;
-      rec[commentKey(q)] = neg ? answers[commentKey(q)].trim() : "";
+      rec[key] = ALWAYS_FILLED.indexOf(key) > -1
+        ? answers[q.id] + (typed ? " - " + typed : "")
+        : typed;
     });
     rec.has_negative_feedback = anyNeg || no ? "Yes" : "No";
     // Tracking fields passed through the WhatsApp link (optional).
