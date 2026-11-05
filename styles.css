@@ -186,3 +186,6 @@ select:focus, .input:focus { outline: none; border-color: var(--red); box-shadow
 /* Comment box for negative answers */
 .field__help { display: block; font-size: 13px; color: var(--muted); margin: -2px 0 8px; }
 .optional { font-weight: 400; color: var(--muted); font-size: 13px; }
+
+/* Dealership drop-down before a province is chosen */
+select:disabled { background: var(--panel); color: var(--muted); cursor: not-allowed; }

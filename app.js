@@ -97,7 +97,21 @@
    * State
    * ------------------------------------------------------------------ */
   var params = new URLSearchParams(location.search);
+  var BY_PROVINCE = CFG.DEALERS_BY_PROVINCE || {};
+  var PROVINCES = Object.keys(BY_PROVINCE);
+  function provinceOf(dealer) {
+    for (var i = 0; i < PROVINCES.length; i++) {
+      if (BY_PROVINCE[PROVINCES[i]].indexOf(dealer) > -1) return PROVINCES[i];
+    }
+    return "";
+  }
+
   var answers = {
+    first_name: "",
+    surname: "",
+    designation: "",
+    designation_other: "",
+    province: "",
     dealership: "",
     lms: "",
     lms_other: "",
@@ -115,15 +129,16 @@
   var consentAt = "";
 
   // Optional prefill from the WhatsApp link, e.g. ?dealer=...&lms=...&ref=...
-  if (params.get("dealer") && (CFG.DEALERSHIPS || []).indexOf(params.get("dealer")) > -1) {
+  if (params.get("dealer") && provinceOf(params.get("dealer"))) {
     answers.dealership = params.get("dealer");
+    answers.province = provinceOf(answers.dealership);
   }
   if (params.get("lms") && (CFG.LMS_OPTIONS || []).indexOf(params.get("lms")) > -1) {
     answers.lms = params.get("lms");
   }
 
-  // Screens: intro, context (dealer + LMS), the 7 questions, thank-you.
-  var screens = [{ type: "intro" }, { type: "context" }]
+  // Screens: intro, about you, dealership (province + dealer + LMS), the 7 questions, thank-you.
+  var screens = [{ type: "intro" }, { type: "person" }, { type: "context" }]
     .concat(QUESTIONS)
     .concat([{ type: "done" }]);
   var STEP_COUNT = screens.length - 2; // excludes intro and done
@@ -170,7 +185,8 @@
       '<p class="notice__title">' + ICON.shield + "Privacy Notice (POPIA Compliance)</p>" +
       "<p>In accordance with the <strong>Protection of Personal Information Act (POPIA)</strong>, we are committed to protecting your personal information and your right to privacy.</p>" +
       "<h3>What we collect:</h3><ul>" +
-      "<li>Your dealership and the Lead Management System it uses</li>" +
+      "<li>Your name, surname and designation</li>" +
+      "<li>Your province, dealership and the Lead Management System it uses</li>" +
       "<li>Your ratings and feedback responses</li>" +
       "<li>Date and time the survey was completed</li>" +
       "<li>Device and browser used to complete the survey</li></ul>" +
@@ -231,6 +247,25 @@
     );
   }
 
+  function textField(name, label, value, autocomplete) {
+    return (
+      '<label class="field"><span class="field__label">' + esc(label) + "</span>" +
+      '<input class="input" type="text" maxlength="80" name="' + name + '" id="' + name + '" autocomplete="' +
+      autocomplete + '" autocapitalize="words" value="' + esc(value || "") + '"></label>'
+    );
+  }
+
+  // Dealership options for the selected province only.
+  function dealerOptions() {
+    if (!answers.province) return '<option value="">Select a province first</option>';
+    return (
+      '<option value="">Select…</option>' +
+      (BY_PROVINCE[answers.province] || []).map(function (o) {
+        return '<option value="' + esc(o) + '"' + (o === answers.dealership ? " selected" : "") + ">" + esc(o) + "</option>";
+      }).join("")
+    );
+  }
+
   function otherBox(name, value, show, placeholder) {
     return (
       '<div class="reveal' + (show ? " is-open" : "") + '" data-reveal="' + name + '">' +
@@ -254,11 +289,22 @@
 
     if (s.type === "intro") {
       html = introHtml();
-    } else if (s.type === "context") {
+    } else if (s.type === "person") {
       html =
         '<p class="eyebrow">About you</p>' +
-        '<h1 class="qtitle">First, tell us where you work</h1>' +
-        selectHtml("dealership", "Dealership", CFG.DEALERSHIPS || [], answers.dealership, false) +
+        '<h1 class="qtitle">First, tell us about yourself</h1>' +
+        textField("first_name", "Name", answers.first_name, "given-name") +
+        textField("surname", "Surname", answers.surname, "family-name") +
+        selectHtml("designation", "Designation", CFG.DESIGNATIONS || [], answers.designation, true) +
+        otherBox("designation_other", answers.designation_other, answers.designation === OTHER, "Your designation");
+    } else if (s.type === "context") {
+      html =
+        '<p class="eyebrow">Your dealership</p>' +
+        '<h1 class="qtitle">Where do you work?</h1>' +
+        selectHtml("province", "Province", PROVINCES, answers.province, false) +
+        '<label class="field"><span class="field__label">Dealership</span>' +
+        '<span class="select"><select name="dealership" id="dealership"' + (answers.province ? "" : " disabled") + ">" +
+        dealerOptions() + "</select></span></label>" +
         selectHtml("lms", "Lead Management System currently used", CFG.LMS_OPTIONS || [], answers.lms, true) +
         otherBox("lms_other", answers.lms_other, answers.lms === OTHER, "Name of the system");
     } else if (s.type === "done") {
@@ -376,6 +422,13 @@
     answers[name] = t.value;
 
     if (name === "lms") toggleReveal("lms_other", t.value === OTHER);
+    if (name === "designation") toggleReveal("designation_other", t.value === OTHER);
+    if (name === "province") {
+      if (provinceOf(answers.dealership) !== t.value) answers.dealership = "";
+      var dsel = $("dealership");
+      dsel.innerHTML = dealerOptions();
+      dsel.disabled = !t.value;
+    }
     if (name === "q7_benefit") toggleReveal("q7_benefit_other", t.value === OTHER);
     if (name === "q7_prequalification") {
       toggleReveal("q7_yes", t.value.indexOf("Yes") === 0);
@@ -404,7 +457,14 @@
     var s = screens[current];
     if (s.type === "intro" && !answers.popia_consent) return "Please accept the Privacy Notice to start the survey.";
     var trim = function (v) { return (v || "").trim(); };
+    if (s.type === "person") {
+      if (trim(answers.first_name).length < 2) return "Please enter your name.";
+      if (trim(answers.surname).length < 2) return "Please enter your surname.";
+      if (!answers.designation) return "Please select your designation.";
+      if (answers.designation === OTHER && !trim(answers.designation_other)) return "Please enter your designation.";
+    }
     if (s.type === "context") {
+      if (!answers.province) return "Please select your province.";
       if (!answers.dealership) return "Please select your dealership.";
       if (!answers.lms) return "Please select the Lead Management System you use.";
       if (answers.lms === OTHER && !trim(answers.lms_other)) return "Please name the system you use.";
@@ -465,6 +525,10 @@
       response_id: uuid(),
       survey_id: CFG.SURVEY_ID || "",
       submitted_at: new Date().toISOString(),
+      first_name: answers.first_name.trim(),
+      surname: answers.surname.trim(),
+      designation: answers.designation === OTHER ? "Other: " + answers.designation_other.trim() : answers.designation,
+      province: answers.province,
       dealership: answers.dealership,
       lms: answers.lms === OTHER ? "Other: " + answers.lms_other.trim() : answers.lms,
       q1_ease_of_use: answers.q1_ease_of_use,

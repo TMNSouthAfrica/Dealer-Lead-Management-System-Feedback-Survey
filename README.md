@@ -16,7 +16,8 @@ host (GitHub Pages, Netlify, Vercel, S3, an existing web server).
 | Step | Content | Type |
 |------|---------|------|
 | Intro | Logo, purpose, date, duration and question count, POPIA notice | Required consent checkbox |
-| About you | Dealership, LMS currently used (+ "Other" box) | Drop-downs |
+| About you | Name, surname, designation (+ "Other" box) | Text fields, drop-down |
+| Your dealership | Province, then dealership (filtered to that province), LMS currently used (+ "Other" box) | Drop-downs |
 | Q1 | How easy do you find the LMS to use? | 5-point scale |
 | Q2 | Does the system provide all the functionality you need? | 4-point scale |
 | Q3 | How effectively does it track leads from allocation to outcome? | 5-point scale |
@@ -37,7 +38,8 @@ required, and the respondent can go back to change it.
 
 ## Configuration (`config.js`)
 
-- `DEALERSHIPS`: the 104 dealerships from the Mahindra store locator list (`Mahindra_Store_Locator_Info.xlsx`).
+- `DEALERS_BY_PROVINCE`: the 104 dealerships from the Mahindra store locator list (`Mahindra_Store_Locator_Info.xlsx`), grouped by province. The spreadsheet has no province column, so provinces were assigned from each town name. Non-South-African outlets are under "Outside South Africa".
+- `DESIGNATIONS`: Owner, Franchise Director, Dealer Principal, Marketing Manager, Sales Manager, Sales Executive, Fleet Sales Executive. "Other" is added automatically.
 - `LMS_OPTIONS`: **replace the placeholders** with the systems in use. "Other" is added automatically.
 - `PRIVACY_EMAIL`: contact shown in the privacy notice (default `privacy@mahindra.co.za`).
 - `SUBMIT_URL`: the endpoint that receives responses. When it is empty the page runs in demo
@@ -48,7 +50,7 @@ required, and the respondent can go back to change it.
 Each submission is sent as one flat JSON object (one spreadsheet row), so results can be
 compared across systems and dealerships:
 
-- `dealership`, `lms`
+- `first_name`, `surname`, `designation`, `province`, `dealership`, `lms`
 - `q1_ease_of_use` + `q1_score` (5 = best), likewise `q2`, `q3`, `q5` and `q7`
   (Q7 "Unsure" has no score)
 - `q4_challenges` (semicolon list), `q4_other_text`, and one 0/1 column per challenge
@@ -74,7 +76,7 @@ also works. The body is sent as `text/plain` so the browser skips a CORS preflig
 https://your-host/survey/?dealer=Mahindra%20Polokwane&lms=LMS%201&ref=wave1&phone=27821234567
 ```
 
-- `dealer` / `lms`: pre-select the drop-downs. They must exactly match an entry in `config.js`.
+- `dealer` / `lms`: pre-select the drop-downs (`dealer` also selects its province). They must exactly match an entry in `config.js`.
 - `ref`, `phone` (or `wa`): passed through to the response for tracking and de-duplication.
 
 ## Local preview
