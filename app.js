@@ -239,10 +239,7 @@
       html =
         '<p class="eyebrow">About you</p>' +
         '<h1 class="qtitle">First, tell us where you work</h1>' +
-        '<label class="field field--tight"><span class="field__label">Dealership</span>' +
-        '<input class="input input--search" type="search" id="dealerSearch" autocomplete="off" ' +
-        'placeholder="Search by town or name, e.g. Polokwane" aria-controls="dealership"></label>' +
-        selectHtml("dealership", "Select your dealership", CFG.DEALERSHIPS || [], answers.dealership, false) +
+        selectHtml("dealership", "Dealership", CFG.DEALERSHIPS || [], answers.dealership, false) +
         selectHtml("lms", "Lead Management System currently used", CFG.LMS_OPTIONS || [], answers.lms, true) +
         otherBox("lms_other", answers.lms_other, answers.lms === OTHER, "Name of the system");
     } else if (s.type === "done") {
@@ -312,7 +309,6 @@
 
   // Text fields update on every keystroke; choices and selects on change.
   form.addEventListener("input", function (e) {
-    if (e.target.id === "dealerSearch") return filterDealers(e.target.value);
     if (e.target.type === "text" || e.target.tagName === "TEXTAREA") onChange(e.target);
   });
   form.addEventListener("change", function (e) {
@@ -362,24 +358,6 @@
     if (t.type === "radio" && name !== "q7_prequalification") {
       setTimeout(function () { if (screens[current].id === name) go(1); }, 280);
     }
-  }
-
-  // Narrow the 100+ dealership drop-down to entries matching the search text.
-  function filterDealers(text) {
-    var sel = $("dealership");
-    var q = text.toLowerCase().trim();
-    var all = CFG.DEALERSHIPS || [];
-    var matches = all.filter(function (n) { return n.toLowerCase().indexOf(q) > -1; });
-    if (matches.length === 1 && q) answers.dealership = matches[0];
-    var shown = matches.slice();
-    if (answers.dealership && shown.indexOf(answers.dealership) < 0) shown.unshift(answers.dealership);
-    var head = !q ? "Select…" : matches.length ? matches.length + (matches.length === 1 ? " match" : " matches") : "No matches, try another search";
-    sel.innerHTML =
-      '<option value="">' + esc(head) + "</option>" +
-      shown.map(function (o) {
-        return '<option value="' + esc(o) + '"' + (o === answers.dealership ? " selected" : "") + ">" + esc(o) + "</option>";
-      }).join("");
-    errorEl.textContent = "";
   }
 
   function validate() {

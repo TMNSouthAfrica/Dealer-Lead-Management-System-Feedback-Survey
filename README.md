@@ -32,7 +32,7 @@ required, and the respondent can go back to change it.
 
 ## Configuration (`config.js`)
 
-- `DEALERSHIPS`: the 104 dealerships from the Mahindra store locator list (`Mahindra_Store_Locator_Info.xlsx`). The page adds a search box above the drop-down.
+- `DEALERSHIPS`: the 104 dealerships from the Mahindra store locator list (`Mahindra_Store_Locator_Info.xlsx`).
 - `LMS_OPTIONS`: **replace the placeholders** with the systems in use. "Other" is added automatically.
 - `PRIVACY_EMAIL`: contact shown in the privacy notice (default `privacy@mahindra.co.za`).
 - `SUBMIT_URL`: the endpoint that receives responses. When it is empty the page runs in demo
