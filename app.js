@@ -594,12 +594,24 @@
       return done();
     }
 
-    // text/plain avoids a CORS preflight (required for Google Apps Script web apps).
+    // Both formats are "simple" requests, so the browser sends no CORS preflight.
+    // "form" (default) posts URL-encoded fields, which webhook tools such as Pabbly
+    // Connect split into one mappable field per answer. "json" posts the record as
+    // a JSON string in a text/plain body.
+    var asJson = CFG.SUBMIT_FORMAT === "json";
+    var body;
+    if (asJson) {
+      body = JSON.stringify(rec);
+    } else {
+      body = new URLSearchParams();
+      Object.keys(rec).forEach(function (k) { body.append(k, rec[k] == null ? "" : String(rec[k])); });
+    }
     fetch(CFG.SUBMIT_URL, {
       method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify(rec),
-      redirect: "follow",
+      mode: "no-cors", // the webhook doesn't need to send CORS headers; a network failure still rejects
+      headers: { "Content-Type": asJson ? "text/plain;charset=utf-8" : "application/x-www-form-urlencoded;charset=UTF-8" },
+      body: asJson ? body : body.toString(),
+      keepalive: true,
     })
       .then(function (r) {
         if (!r.ok && r.type !== "opaque") throw new Error("HTTP " + r.status);

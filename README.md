@@ -42,12 +42,15 @@ required, and the respondent can go back to change it.
 - `DESIGNATIONS`: Owner, Franchise Director, Dealer Principal, Marketing Manager, Sales Manager, Sales Executive, Fleet Sales Executive. "Other" is added automatically.
 - `LMS_OPTIONS`: **replace the placeholders** with the systems in use. "Other" is added automatically.
 - `PRIVACY_EMAIL`: contact shown in the privacy notice (default `privacy@mahindra.co.za`).
-- `SUBMIT_URL`: the endpoint that receives responses. When it is empty the page runs in demo
-  mode: the response is logged to the browser console and kept in `localStorage`.
+- `SUBMIT_URL`: the endpoint that receives responses. It is set to the Pabbly Connect webhook.
+  When it is empty the page runs in demo mode: the response is logged to the browser console and
+  kept in `localStorage`.
+- `SUBMIT_FORMAT`: `"form"` (default) sends one URL-encoded field per answer, which Pabbly maps
+  as separate fields; `"json"` sends the whole record as a JSON string.
 
 ## Capturing responses
 
-Each submission is sent as one flat JSON object (one spreadsheet row), so results can be
+Each submission is sent to the Pabbly Connect webhook as one flat record (one spreadsheet row), so results can be
 compared across systems and dealerships:
 
 - `name_surname`, `designation`, `province`, `dealership`, `lms`
@@ -67,8 +70,8 @@ compared across systems and dealerships:
 2. Go to **Deploy → New deployment → Web app**, set *Execute as: Me* and *Who has access: Anyone*.
 3. Paste the `/exec` URL into `SUBMIT_URL`.
 
-Any other webhook that accepts a POST with a JSON body (Pabbly Connect, Zapier, Make, a CRM)
-also works. The body is sent as `text/plain` so the browser skips a CORS preflight.
+Any other webhook (Pabbly Connect, Zapier, Make, a CRM) also works. Requests are sent without a
+CORS preflight, so the receiving service doesn't need special CORS settings.
 
 ## WhatsApp link parameters (optional)
 

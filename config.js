@@ -1,7 +1,7 @@
 /*
  * Survey configuration — edit this file only; no other code changes needed.
  *
- *  - SUBMIT_URL: where responses are POSTed as JSON. Works with a Google Apps
+ *  - SUBMIT_URL: where responses are POSTed. Works with a Google Apps
  *    Script web app (see google-apps-script/Code.gs), Pabbly / Zapier / Make
  *    webhooks, or any endpoint that accepts a POST body.
  *    Leave empty to run in demo mode (responses are logged to the console and
@@ -13,7 +13,11 @@
  *    entries with the real list before launch.
  */
 window.SURVEY_CONFIG = {
-  SUBMIT_URL: "",
+  // Pabbly Connect webhook that receives every completed response.
+  SUBMIT_URL: "https://connect.pabbly.com/webhook-listener/webhook/IjU3NmQwNTZhMDYzMDA0MzQ1MjZiIg_3D_3D_pc/IjU3NjcwNTZiMDYzNDA0MzA1MjY5NTUzMjUxM2Ei_pc",
+
+  // "form" = one field per answer (best for Pabbly); "json" = one JSON body.
+  SUBMIT_FORMAT: "form",
 
   SURVEY_ID: "mahindra-dealer-lms-feedback-2026",
 

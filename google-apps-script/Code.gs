@@ -16,7 +16,10 @@ function doPost(e) {
   var lock = LockService.getScriptLock();
   lock.waitLock(10000);
   try {
-    var data = JSON.parse(e.postData.contents);
+    // Accept both form-encoded fields (SUBMIT_FORMAT "form") and a JSON body ("json").
+    var data = e.postData && e.postData.type === "application/x-www-form-urlencoded"
+      ? e.parameter
+      : JSON.parse(e.postData.contents);
     var ss = SpreadsheetApp.getActiveSpreadsheet();
     var sheet = ss.getSheetByName(SHEET_NAME) || ss.insertSheet(SHEET_NAME);
 
