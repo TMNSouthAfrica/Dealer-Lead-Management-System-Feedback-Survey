@@ -61,10 +61,9 @@ compared across systems and dealerships:
   (Q7 "Unsure" has no score)
 - `q4_challenges` (semicolon list), `q4_other_text`, and one 0/1 column per challenge
   (`q4_difficult_to_navigate`, `q4_slow_performance_or_technical_issues`, …) for easy counting
-- `q1_comment` (Usability), `q2_comment` (System Functionality), `q3_comment` (Lead Tracking): always
-  filled with the selected option, plus the typed comment on a negative answer, e.g. `Easy` or
-  `Very difficult - too many clicks`
-- `q5_comment`: the typed comment on a negative Q5 answer (blank otherwise)
+- `q1_comment` (Usability), `q2_comment` (System Functionality), `q3_comment` (Lead Tracking),
+  `q5_comment` (Reliability): always filled with the selected option, plus the typed comment on a
+  negative answer, e.g. `Easy` or `Very difficult - too many clicks`
 - `has_negative_feedback` (Yes/No): any negative answer, or "No" on Q7, for easy follow-up filtering
 - `q6_improvement`, `q7_benefit`, `q7_benefit_other`, `q7_reason_no`
 - `popia_consent` (Yes), `popia_consent_at` (timestamp)

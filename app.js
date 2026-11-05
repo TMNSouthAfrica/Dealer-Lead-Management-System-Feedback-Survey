@@ -3,7 +3,7 @@
 
   var CFG = window.SURVEY_CONFIG || {};
   // Bump together with the ?v= tags in index.html on every release.
-  var APP_VERSION = "2026.11.05-3";
+  var APP_VERSION = "2026.11.05-4";
   var OTHER = "Other";
 
   /* ------------------------------------------------------------------ *
@@ -559,11 +559,10 @@
     rec.q7_benefit = yes ? answers.q7_benefit : "";
     rec.q7_benefit_other = yes && answers.q7_benefit === OTHER ? answers.q7_benefit_other.trim() : "";
     rec.q7_reason_no = no ? answers.q7_reason_no.trim() : "";
-    // Comment fields. For Q1–Q3 (Usability, System Functionality, Lead Tracking)
-    // the comment field always holds the selected option, followed by the typed
-    // comment when one was given: e.g. "Easy" or "Very difficult - too many clicks".
-    // Other comment fields only hold the typed comment on a negative answer.
-    var ALWAYS_FILLED = ["q1_comment", "q2_comment", "q3_comment"];
+    // Comment fields for Q1, Q2, Q3 and Q5 (Usability, System Functionality,
+    // Lead Tracking, Reliability) always hold the selected option, followed by the
+    // typed comment when one was given: e.g. "Easy" or "Very difficult - too many clicks".
+    var ALWAYS_FILLED = ["q1_comment", "q2_comment", "q3_comment", "q5_comment"];
     var anyNeg = false;
     NEG_QUESTIONS.forEach(function (q) {
       var key = commentKey(q);
