@@ -16,7 +16,7 @@ host (GitHub Pages, Netlify, Vercel, S3, an existing web server).
 | Step | Content | Type |
 |------|---------|------|
 | Intro | Logo, purpose, date, duration and question count, POPIA notice | Required consent checkbox |
-| About you | Name, surname, designation (+ "Other" box) | Text fields, drop-down |
+| About you | Name & surname (one field), designation (+ "Other" box) | Text field, drop-down |
 | Your dealership | Province, then dealership (filtered to that province), LMS currently used (+ "Other" box) | Drop-downs |
 | Q1 | How easy do you find the LMS to use? | 5-point scale |
 | Q2 | Does the system provide all the functionality you need? | 4-point scale |
@@ -50,7 +50,7 @@ required, and the respondent can go back to change it.
 Each submission is sent as one flat JSON object (one spreadsheet row), so results can be
 compared across systems and dealerships:
 
-- `first_name`, `surname`, `designation`, `province`, `dealership`, `lms`
+- `name_surname`, `designation`, `province`, `dealership`, `lms`
 - `q1_ease_of_use` + `q1_score` (5 = best), likewise `q2`, `q3`, `q5` and `q7`
   (Q7 "Unsure" has no score)
 - `q4_challenges` (semicolon list), `q4_other_text`, and one 0/1 column per challenge

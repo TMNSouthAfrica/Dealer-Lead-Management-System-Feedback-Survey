@@ -107,8 +107,7 @@
   }
 
   var answers = {
-    first_name: "",
-    surname: "",
+    name_surname: "",
     designation: "",
     designation_other: "",
     province: "",
@@ -250,7 +249,7 @@
   function textField(name, label, value, autocomplete) {
     return (
       '<label class="field"><span class="field__label">' + esc(label) + "</span>" +
-      '<input class="input" type="text" maxlength="80" name="' + name + '" id="' + name + '" autocomplete="' +
+      '<input class="input" type="text" maxlength="120" name="' + name + '" id="' + name + '" autocomplete="' +
       autocomplete + '" autocapitalize="words" value="' + esc(value || "") + '"></label>'
     );
   }
@@ -293,8 +292,7 @@
       html =
         '<p class="eyebrow">About you</p>' +
         '<h1 class="qtitle">First, tell us about yourself</h1>' +
-        textField("first_name", "Name", answers.first_name, "given-name") +
-        textField("surname", "Surname", answers.surname, "family-name") +
+        textField("name_surname", "Name & surname", answers.name_surname, "name") +
         selectHtml("designation", "Designation", CFG.DESIGNATIONS || [], answers.designation, true) +
         otherBox("designation_other", answers.designation_other, answers.designation === OTHER, "Your designation");
     } else if (s.type === "context") {
@@ -458,8 +456,7 @@
     if (s.type === "intro" && !answers.popia_consent) return "Please accept the Privacy Notice to start the survey.";
     var trim = function (v) { return (v || "").trim(); };
     if (s.type === "person") {
-      if (trim(answers.first_name).length < 2) return "Please enter your name.";
-      if (trim(answers.surname).length < 2) return "Please enter your surname.";
+      if (trim(answers.name_surname).split(/\s+/).length < 2) return "Please enter your name and surname.";
       if (!answers.designation) return "Please select your designation.";
       if (answers.designation === OTHER && !trim(answers.designation_other)) return "Please enter your designation.";
     }
@@ -525,8 +522,7 @@
       response_id: uuid(),
       survey_id: CFG.SURVEY_ID || "",
       submitted_at: new Date().toISOString(),
-      first_name: answers.first_name.trim(),
-      surname: answers.surname.trim(),
+      name_surname: answers.name_surname.trim().replace(/\s+/g, " "),
       designation: answers.designation === OTHER ? "Other: " + answers.designation_other.trim() : answers.designation,
       province: answers.province,
       dealership: answers.dealership,
