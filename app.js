@@ -15,6 +15,8 @@
       title: "How easy do you find the Lead Management System to use?",
       options: ["Very easy", "Easy", "Neutral", "Difficult", "Very difficult"],
       scores: [5, 4, 3, 2, 1],
+      negative: ["Difficult", "Very difficult"],
+      commentPrompt: "What makes the system difficult to use?",
     },
     {
       id: "q2_functionality",
@@ -22,6 +24,8 @@
       title: "Does the system provide all the functionality you need to manage your leads effectively?",
       options: ["Yes, completely", "Mostly", "Partially", "No"],
       scores: [4, 3, 2, 1],
+      negative: ["Partially", "No"],
+      commentPrompt: "Which functionality is missing or not working as needed?",
     },
     {
       id: "q3_lead_tracking",
@@ -29,6 +33,8 @@
       title: "How effectively does the system help you track leads from allocation to final outcome?",
       options: ["Very effectively", "Effectively", "Moderately", "Ineffectively", "Very ineffectively"],
       scores: [5, 4, 3, 2, 1],
+      negative: ["Ineffectively", "Very ineffectively"],
+      commentPrompt: "Where does lead tracking break down between allocation and final outcome?",
     },
     {
       id: "q4_challenges",
@@ -54,6 +60,8 @@
       title: "How confident are you in the system's ability to support accurate lead tracking and conversion reporting?",
       options: ["Very confident", "Confident", "Somewhat confident", "Not very confident", "Not confident at all"],
       scores: [5, 4, 3, 2, 1],
+      negative: ["Not very confident", "Not confident at all"],
+      commentPrompt: "What affects your confidence in the system's tracking and reporting?",
     },
     {
       id: "q6_improvement",
@@ -69,6 +77,13 @@
       scores: [4, 3, 1, null],
     },
   ];
+
+  // Questions that open a comment box when a negative answer is chosen.
+  var NEG_QUESTIONS = QUESTIONS.filter(function (q) { return q.negative; });
+  var COMMENT_REQUIRED = CFG.NEGATIVE_COMMENT_REQUIRED !== false;
+  function commentKey(q) { return q.id.split("_")[0] + "_comment"; }
+  function isNegative(q, value) { return !!q.negative && q.negative.indexOf(value) > -1; }
+  function questionById(id) { return QUESTIONS.filter(function (x) { return x.id === id; })[0]; }
 
   var PREQUAL_BENEFITS = [
     "Higher-quality, sales-ready leads",
@@ -91,6 +106,10 @@
     q7_benefit: "",
     q7_benefit_other: "",
     q7_reason_no: "",
+    q1_comment: "",
+    q2_comment: "",
+    q3_comment: "",
+    q5_comment: "",
     popia_consent: false,
   };
   var consentAt = "";
@@ -252,6 +271,16 @@
       var n = QUESTIONS.indexOf(s) + 1;
       html = qHeader(n, s);
       if (s.type === "single") html += optionsHtml(s, "radio");
+      if (s.negative) {
+        var ck = commentKey(s);
+        html +=
+          '<div class="reveal followup' + (isNegative(s, answers[s.id]) ? " is-open" : "") + '" data-reveal="' + ck + '">' +
+          '<label class="field"><span class="field__label">' + esc(s.commentPrompt) +
+          (COMMENT_REQUIRED ? "" : ' <span class="optional">(optional)</span>') + "</span>" +
+          '<span class="field__help">Sorry to hear that. Your comments help us fix the problem.</span>' +
+          '<textarea class="input input--area" name="' + ck + '" maxlength="1000" rows="3" placeholder="Type your comment…">' +
+          esc(answers[ck]) + "</textarea></label></div>";
+      }
       if (s.type === "multi") {
         html += optionsHtml(s, "checkbox");
         html += otherBox("q4_other", answers.q4_other, answers.q4_challenges.indexOf(OTHER) > -1);
@@ -354,8 +383,19 @@
     }
     if (name === "q6_improvement") $("counter").textContent = t.value.length;
 
+    // Negative answers open a comment box instead of moving on.
+    var rq = t.type === "radio" ? questionById(name) : null;
+    var neg = rq ? isNegative(rq, t.value) : false;
+    if (rq && rq.negative) {
+      toggleReveal(commentKey(rq), neg);
+      if (neg) {
+        var box = screenEl.querySelector('textarea[name="' + commentKey(rq) + '"]');
+        if (box) setTimeout(function () { box.focus(); box.scrollIntoView({ block: "center", behavior: "smooth" }); }, 120);
+      }
+    }
+
     // Auto-advance on single-choice questions without follow-ups (feels like WhatsApp quick replies)
-    if (t.type === "radio" && name !== "q7_prequalification") {
+    if (t.type === "radio" && name !== "q7_prequalification" && !neg) {
       setTimeout(function () { if (screens[current].id === name) go(1); }, 280);
     }
   }
@@ -370,6 +410,9 @@
       if (answers.lms === OTHER && !trim(answers.lms_other)) return "Please name the system you use.";
     }
     if (s.type === "single" && !answers[s.id]) return "Please choose an option to continue.";
+    if (s.negative && COMMENT_REQUIRED && isNegative(s, answers[s.id]) && trim(answers[commentKey(s)]).length < 2) {
+      return "Please add a short comment about what isn't working.";
+    }
     if (s.type === "multi") {
       if (!answers[s.id].length) return "Please select at least one option.";
       if (answers[s.id].indexOf(OTHER) > -1 && !trim(answers.q4_other)) return "Please describe the other challenge.";
@@ -445,6 +488,14 @@
     rec.q7_benefit = yes ? answers.q7_benefit : "";
     rec.q7_benefit_other = yes && answers.q7_benefit === OTHER ? answers.q7_benefit_other.trim() : "";
     rec.q7_reason_no = no ? answers.q7_reason_no.trim() : "";
+    // Comments captured on negative answers (blank when the answer wasn't negative).
+    var anyNeg = false;
+    NEG_QUESTIONS.forEach(function (q) {
+      var neg = isNegative(q, answers[q.id]);
+      anyNeg = anyNeg || neg;
+      rec[commentKey(q)] = neg ? answers[commentKey(q)].trim() : "";
+    });
+    rec.has_negative_feedback = anyNeg || no ? "Yes" : "No";
     // Tracking fields passed through the WhatsApp link (optional).
     rec.popia_consent = answers.popia_consent ? "Yes" : "No";
     rec.popia_consent_at = consentAt;

@@ -16,6 +16,10 @@ window.SURVEY_CONFIG = {
 
   SURVEY_ID: "mahindra-dealer-lms-feedback-2026",
 
+  // Negative answers on Q1, Q2, Q3 and Q5 open a comment box.
+  // true = a comment is required before continuing; false = optional.
+  NEGATIVE_COMMENT_REQUIRED: true,
+
   // Shown in the POPIA privacy notice (same contact as the Test Drive survey).
   PRIVACY_EMAIL: "privacy@mahindra.co.za",
 

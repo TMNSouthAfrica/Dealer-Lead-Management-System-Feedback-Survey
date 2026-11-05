@@ -27,6 +27,11 @@ host (GitHub Pages, Netlify, Vercel, S3, an existing web server).
 | ↳ if **Yes** | Biggest benefit of pre-qualified leads | Drop-down (+ "Other" box) |
 | ↳ if **No** | Why? | Open text |
 
+**Negative feedback comments:** a negative answer on Q1 (Difficult / Very difficult),
+Q2 (Partially / No), Q3 (Ineffectively / Very ineffectively) or Q5 (Not very confident /
+Not confident at all) opens a comment box asking what isn't working. A comment is required by
+default; set `NEGATIVE_COMMENT_REQUIRED: false` in `config.js` to make it optional.
+
 Single-choice answers auto-advance, like tapping a WhatsApp quick reply. Every answer is
 required, and the respondent can go back to change it.
 
@@ -48,6 +53,8 @@ compared across systems and dealerships:
   (Q7 "Unsure" has no score)
 - `q4_challenges` (semicolon list), `q4_other_text`, and one 0/1 column per challenge
   (`q4_difficult_to_navigate`, `q4_slow_performance_or_technical_issues`, …) for easy counting
+- `q1_comment`, `q2_comment`, `q3_comment`, `q5_comment`: comments on negative answers
+- `has_negative_feedback` (Yes/No): any negative answer, or "No" on Q7, for easy follow-up filtering
 - `q6_improvement`, `q7_benefit`, `q7_benefit_other`, `q7_reason_no`
 - `popia_consent` (Yes), `popia_consent_at` (timestamp)
 - `response_id`, `submitted_at`, `survey_id`, `ref`, `phone`, `user_agent`

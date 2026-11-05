@@ -182,3 +182,7 @@ select:focus, .input:focus { outline: none; border-color: var(--red); box-shadow
   .card { padding: 28px 24px; }
   .intro__title { font-size: 24px; }
 }
+
+/* Comment box for negative answers */
+.field__help { display: block; font-size: 13px; color: var(--muted); margin: -2px 0 8px; }
+.optional { font-weight: 400; color: var(--muted); font-size: 13px; }
