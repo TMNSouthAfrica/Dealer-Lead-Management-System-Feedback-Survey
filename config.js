@@ -158,7 +158,10 @@ window.SURVEY_CONFIG = {
     ],
   },
 
-  // Respondent designation (matches the CRM labels).
+  // Respondent designation (matches the CRM labels). The payload also sends
+  // designation_number = position in this list: Owner = 0 … Fleet Sales
+  // Executive = 6, and "Other" = 7. Add new designations at the end so
+  // existing numbers don't change.
   DESIGNATIONS: [
     "Owner",
     "Franchise Director",

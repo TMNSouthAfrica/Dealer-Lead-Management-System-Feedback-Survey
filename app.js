@@ -515,7 +515,13 @@
     return "r-" + Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
   }
 
-  function buildRecord() {
+  function designationNumber() {
+    var list = (CFG.DESIGNATIONS || []).concat([OTHER]);
+    var i = list.indexOf(answers.designation);
+    return i > -1 ? i : "";
+  }
+
+    function buildRecord() {
     var yes = answers.q7_prequalification.indexOf("Yes") === 0;
     var no = answers.q7_prequalification.indexOf("No") === 0;
     var rec = {
@@ -524,6 +530,8 @@
       submitted_at: new Date().toISOString(),
       name_surname: answers.name_surname.trim().replace(/\s+/g, " "),
       designation: answers.designation === OTHER ? "Other: " + answers.designation_other.trim() : answers.designation,
+      // Position in the designation list: Owner = 0, Franchise Director = 1, … Other = last.
+      designation_number: designationNumber(),
       province: answers.province,
       dealership: answers.dealership,
       lms: answers.lms === OTHER ? "Other: " + answers.lms_other.trim() : answers.lms,

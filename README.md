@@ -54,6 +54,9 @@ Each submission is sent to the Pabbly Connect webhook as one flat record (one sp
 compared across systems and dealerships:
 
 - `name_surname`, `designation`, `province`, `dealership`, `lms`
+- `designation_number`: the designation's number, separate from its name: Owner = 0, Franchise Director = 1,
+  Dealer Principal = 2, Marketing Manager = 3, Sales Manager = 4, Sales Executive = 5,
+  Fleet Sales Executive = 6, Other = 7
 - `q1_ease_of_use` + `q1_score` (5 = best), likewise `q2`, `q3`, `q5` and `q7`
   (Q7 "Unsure" has no score)
 - `q4_challenges` (semicolon list), `q4_other_text`, and one 0/1 column per challenge
