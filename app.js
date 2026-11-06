@@ -3,7 +3,7 @@
 
   var CFG = window.SURVEY_CONFIG || {};
   // Bump together with the ?v= tags in index.html on every release.
-  var APP_VERSION = "2026.11.05-4";
+  var APP_VERSION = "2026.11.06-1";
   var OTHER = "Other";
 
   /* ------------------------------------------------------------------ *

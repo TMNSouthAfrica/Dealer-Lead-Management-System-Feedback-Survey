@@ -9,8 +9,7 @@
  *
  *  - DEALERS_BY_PROVINCE: province and dealership drop-downs (store locator list).
  *  - DESIGNATIONS: designation drop-down ("Other" is added automatically).
- *  - LMS_OPTIONS: lead management system drop-down. Replace the placeholder
- *    entries with the real list before launch.
+ *  - LMS_OPTIONS: lead management system drop-down ("Other" is added automatically).
  */
 window.SURVEY_CONFIG = {
   // Pabbly Connect webhook that receives every completed response.
@@ -172,10 +171,17 @@ window.SURVEY_CONFIG = {
     "Fleet Sales Executive",
   ],
 
-  // TODO: replace with the lead management systems in use across the network.
+  // Lead management systems in use across the dealer network (alphabetical).
+  // "Other" is added automatically with a box to name the system.
   LMS_OPTIONS: [
-    "LMS 1 (placeholder)",
-    "LMS 2 (placeholder)",
-    "LMS 3 (placeholder)",
+    "Auto SLM",
+    "CMS",
+    "Dash",
+    "DealersOnline",
+    "Easyquote",
+    "EGM",
+    "Heycarter",
+    "Motodata",
+    "Pinnacle",
   ],
 };

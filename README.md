@@ -40,7 +40,7 @@ required, and the respondent can go back to change it.
 
 - `DEALERS_BY_PROVINCE`: the 104 dealerships from the Mahindra store locator list (`Mahindra_Store_Locator_Info.xlsx`), grouped by province. The spreadsheet has no province column, so provinces were assigned from each town name. Non-South-African outlets are under "Outside South Africa".
 - `DESIGNATIONS`: Owner, Franchise Director, Dealer Principal, Marketing Manager, Sales Manager, Sales Executive, Fleet Sales Executive. "Other" is added automatically.
-- `LMS_OPTIONS`: **replace the placeholders** with the systems in use. "Other" is added automatically.
+- `LMS_OPTIONS`: Auto SLM, CMS, Dash, DealersOnline, Easyquote, EGM, Heycarter, Motodata, Pinnacle. "Other" is added automatically.
 - `PRIVACY_EMAIL`: contact shown in the privacy notice (default `privacy@mahindra.co.za`).
 - `SUBMIT_URL`: the endpoint that receives responses. It is set to the Pabbly Connect webhook.
   When it is empty the page runs in demo mode: the response is logged to the browser console and
@@ -82,7 +82,7 @@ CORS preflight, so the receiving service doesn't need special CORS settings.
 ## WhatsApp link parameters (optional)
 
 ```
-https://your-host/survey/?dealer=Mahindra%20Polokwane&lms=LMS%201&ref=wave1&phone=27821234567
+https://your-host/survey/?dealer=Mahindra%20Polokwane&lms=Motodata&ref=wave1&phone=27821234567
 ```
 
 - `dealer` / `lms`: pre-select the drop-downs (`dealer` also selects its province). They must exactly match an entry in `config.js`.
