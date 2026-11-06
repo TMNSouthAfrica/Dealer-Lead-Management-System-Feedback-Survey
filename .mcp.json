@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "clinch-shopping": {
+      "type": "http",
+      "url": "https://clinchsa.co.za/mcp",
+      "headers": {
+        "Authorization": "Bearer clinch_sag_dhm-default_qKTzuWsy6gmugCzEm5NJYTWtEJHC183o"
+      }
+    }
+  }
+}
