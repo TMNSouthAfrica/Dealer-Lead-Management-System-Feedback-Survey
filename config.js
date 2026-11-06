@@ -28,7 +28,8 @@ window.SURVEY_CONFIG = {
   PRIVACY_EMAIL: "privacy@mahindra.co.za",
 
   // Dealerships grouped by province. Source: Mahindra_Store_Locator_Info.xlsx
-  // (104 entries). The spreadsheet has no province column, so provinces were
+  // (104 entries), plus Mahindra Hillcrest (KwaZulu-Natal). The spreadsheet has
+  // no province column, so provinces were
   // assigned from each dealership's town name; please verify.
   DEALERS_BY_PROVINCE: {
     "Eastern Cape": [
@@ -88,6 +89,7 @@ window.SURVEY_CONFIG = {
       "Mahindra Ballito",
       "Mahindra Durban",
       "Mahindra Empangeni",
+      "Mahindra Hillcrest",
       "Mahindra Kokstad",
       "Mahindra Ladysmith",
       "Mahindra Newcastle",

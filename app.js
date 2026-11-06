@@ -3,7 +3,7 @@
 
   var CFG = window.SURVEY_CONFIG || {};
   // Bump together with the ?v= tags in index.html on every release.
-  var APP_VERSION = "2026.11.06-2";
+  var APP_VERSION = "2026.11.06-3";
   var OTHER = "Other";
 
   /* ------------------------------------------------------------------ *
@@ -39,6 +39,15 @@
       commentPrompt: "Where does lead tracking break down between allocation and final outcome?",
     },
     {
+      id: "q5_reporting_confidence",
+      type: "single",
+      title: "How confident are you in the system's ability to support accurate lead tracking and conversion reporting?",
+      options: ["Very confident", "Confident", "Somewhat confident", "Not very confident", "Not confident at all"],
+      scores: [5, 4, 3, 2, 1],
+      negative: ["Not very confident", "Not confident at all"],
+      commentPrompt: "What affects your confidence in the system's tracking and reporting?",
+    },
+    {
       id: "q4_challenges",
       type: "multi",
       title: "What are your biggest challenges when using the system?",
@@ -55,15 +64,6 @@
         OTHER,
       ],
       exclusive: "No significant challenges",
-    },
-    {
-      id: "q5_reporting_confidence",
-      type: "single",
-      title: "How confident are you in the system's ability to support accurate lead tracking and conversion reporting?",
-      options: ["Very confident", "Confident", "Somewhat confident", "Not very confident", "Not confident at all"],
-      scores: [5, 4, 3, 2, 1],
-      negative: ["Not very confident", "Not confident at all"],
-      commentPrompt: "What affects your confidence in the system's tracking and reporting?",
     },
     {
       id: "q6_improvement",
@@ -545,7 +545,7 @@
       q4_other_text: answers.q4_challenges.indexOf(OTHER) > -1 ? answers.q4_other.trim() : "",
     };
     // One 0/1 column per challenge so they can be counted / pivoted directly.
-    QUESTIONS[3].options.forEach(function (o) {
+    questionById("q4_challenges").options.forEach(function (o) {
       rec["q4_" + slug(o)] = answers.q4_challenges.indexOf(o) > -1 ? 1 : 0;
     });
     rec.q5_reporting_confidence = answers.q5_reporting_confidence;
@@ -556,7 +556,7 @@
     rec.q7_benefit = yes ? answers.q7_benefit : "";
     rec.q7_benefit_other = yes && answers.q7_benefit === OTHER ? answers.q7_benefit_other.trim() : "";
     rec.q7_reason_no = no ? answers.q7_reason_no.trim() : "";
-    // Comment fields for Q1, Q2, Q3 and Q5 (Usability, System Functionality,
+    // Comment fields for Q1, Q2, Q3 and the confidence question (Usability, System Functionality,
     // Lead Tracking, Reliability) always hold the selected option, followed by the
     // typed comment when one was given: e.g. "Easy" or "Very difficult - too many clicks".
     var ALWAYS_FILLED = ["q1_comment", "q2_comment", "q3_comment", "q5_comment"];

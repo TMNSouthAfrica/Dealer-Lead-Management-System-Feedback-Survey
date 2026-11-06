@@ -21,15 +21,19 @@ host (GitHub Pages, Netlify, Vercel, S3, an existing web server).
 | Q1 | How easy do you find the LMS to use? | 5-point scale |
 | Q2 | Does the system provide all the functionality you need? | 4-point scale |
 | Q3 | How effectively does it track leads from allocation to outcome? | 5-point scale |
-| Q4 | Biggest challenges | Multi-select (+ "Other" box; "No significant challenges" is exclusive) |
-| Q5 | Confidence in accurate tracking and conversion reporting | 5-point scale |
+| Q4 | Confidence in accurate tracking and conversion reporting | 5-point scale |
+| Q5 | Biggest challenges | Multi-select (+ "Other" box; "No significant challenges" is exclusive) |
 | Q6 | One improvement that would make the system more effective | Open text |
 | Q7 | Is pre-qualification of leads still beneficial? | Single choice, with branching |
+
+Payload field names were kept when Q4 and Q5 swapped places, so existing Pabbly mappings still work:
+the confidence question (shown as Q4) is still sent as `q5_reporting_confidence` / `q5_score` /
+`q5_comment`, and the challenges question (shown as Q5) as `q4_challenges` / `q4_*`.
 | ↳ if **Yes** | Biggest benefit of pre-qualified leads | Drop-down (+ "Other" box) |
 | ↳ if **No** | Why? | Open text |
 
 **Negative feedback comments:** a negative answer on Q1 (Difficult / Very difficult),
-Q2 (Partially / No), Q3 (Ineffectively / Very ineffectively) or Q5 (Not very confident /
+Q2 (Partially / No), Q3 (Ineffectively / Very ineffectively) or Q4 (Not very confident /
 Not confident at all) opens a comment box asking what isn't working. A comment is required by
 default; set `NEGATIVE_COMMENT_REQUIRED: false` in `config.js` to make it optional.
 
@@ -38,7 +42,7 @@ required, and the respondent can go back to change it.
 
 ## Configuration (`config.js`)
 
-- `DEALERS_BY_PROVINCE`: the 104 dealerships from the Mahindra store locator list (`Mahindra_Store_Locator_Info.xlsx`), grouped by province. The spreadsheet has no province column, so provinces were assigned from each town name. Non-South-African outlets are under "Outside South Africa".
+- `DEALERS_BY_PROVINCE`: the 104 dealerships from the Mahindra store locator list (`Mahindra_Store_Locator_Info.xlsx`) plus Mahindra Hillcrest (KwaZulu-Natal), grouped by province. The spreadsheet has no province column, so provinces were assigned from each town name. Non-South-African outlets are under "Outside South Africa".
 - `DESIGNATIONS`: Owner, Franchise Director, Dealer Principal, Marketing Manager, Sales Manager, Sales Executive, Fleet Sales Executive. "Other" is added automatically.
 - `LMS_OPTIONS`: Auto SLM, CMS, Dash, DealersOnline, Easyquote, EGM, Heycarter, Motodata, Pinnacle. This drop-down has no "Other" option.
 - `PRIVACY_EMAIL`: contact shown in the privacy notice (default `privacy@mahindra.co.za`).
