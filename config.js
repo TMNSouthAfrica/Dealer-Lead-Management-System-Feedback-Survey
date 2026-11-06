@@ -9,7 +9,7 @@
  *
  *  - DEALERS_BY_PROVINCE: province and dealership drop-downs (store locator list).
  *  - DESIGNATIONS: designation drop-down ("Other" is added automatically).
- *  - LMS_OPTIONS: lead management system drop-down ("Other" is added automatically).
+ *  - LMS_OPTIONS: lead management system drop-down (no "Other" option).
  */
 window.SURVEY_CONFIG = {
   // Pabbly Connect webhook that receives every completed response.
@@ -172,7 +172,7 @@ window.SURVEY_CONFIG = {
   ],
 
   // Lead management systems in use across the dealer network (alphabetical).
-  // "Other" is added automatically with a box to name the system.
+  // This drop-down has no "Other" option: respondents pick one of these.
   LMS_OPTIONS: [
     "Auto SLM",
     "CMS",

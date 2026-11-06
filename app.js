@@ -3,7 +3,7 @@
 
   var CFG = window.SURVEY_CONFIG || {};
   // Bump together with the ?v= tags in index.html on every release.
-  var APP_VERSION = "2026.11.06-1";
+  var APP_VERSION = "2026.11.06-2";
   var OTHER = "Other";
 
   /* ------------------------------------------------------------------ *
@@ -115,7 +115,6 @@
     province: "",
     dealership: "",
     lms: "",
-    lms_other: "",
     q4_challenges: [],
     q4_other: "",
     q7_benefit: "",
@@ -305,8 +304,8 @@
         '<label class="field"><span class="field__label">Dealership</span>' +
         '<span class="select"><select name="dealership" id="dealership"' + (answers.province ? "" : " disabled") + ">" +
         dealerOptions() + "</select></span></label>" +
-        selectHtml("lms", "Lead Management System currently used", CFG.LMS_OPTIONS || [], answers.lms, true) +
-        otherBox("lms_other", answers.lms_other, answers.lms === OTHER, "Name of the system");
+        // No "Other" option here: respondents must pick one of the listed systems.
+        selectHtml("lms", "Lead Management System currently used", CFG.LMS_OPTIONS || [], answers.lms, false);
     } else if (s.type === "done") {
       html =
         '<div class="done"><div class="done__icon">' + ICON.check + '</div>' +
@@ -421,7 +420,6 @@
 
     answers[name] = t.value;
 
-    if (name === "lms") toggleReveal("lms_other", t.value === OTHER);
     if (name === "designation") toggleReveal("designation_other", t.value === OTHER);
     if (name === "province") {
       if (provinceOf(answers.dealership) !== t.value) answers.dealership = "";
@@ -466,7 +464,6 @@
       if (!answers.province) return "Please select your province.";
       if (!answers.dealership) return "Please select your dealership.";
       if (!answers.lms) return "Please select the Lead Management System you use.";
-      if (answers.lms === OTHER && !trim(answers.lms_other)) return "Please name the system you use.";
     }
     if (s.type === "single" && !answers[s.id]) return "Please choose an option to continue.";
     if (s.negative && COMMENT_REQUIRED && isNegative(s, answers[s.id]) && trim(answers[commentKey(s)]).length < 2) {
@@ -537,7 +534,7 @@
       designation_number: designationNumber(),
       province: answers.province,
       dealership: answers.dealership,
-      lms: answers.lms === OTHER ? "Other: " + answers.lms_other.trim() : answers.lms,
+      lms: answers.lms,
       q1_ease_of_use: answers.q1_ease_of_use,
       q1_score: scoreOf("q1_ease_of_use"),
       q2_functionality: answers.q2_functionality,

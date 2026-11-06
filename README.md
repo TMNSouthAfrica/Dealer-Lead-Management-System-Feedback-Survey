@@ -17,7 +17,7 @@ host (GitHub Pages, Netlify, Vercel, S3, an existing web server).
 |------|---------|------|
 | Intro | Logo, purpose, date, duration and question count, POPIA notice | Required consent checkbox |
 | About you | Name & surname (one field), designation (+ "Other" box) | Text field, drop-down |
-| Your dealership | Province, then dealership (filtered to that province), LMS currently used (+ "Other" box) | Drop-downs |
+| Your dealership | Province, then dealership (filtered to that province), LMS currently used | Drop-downs |
 | Q1 | How easy do you find the LMS to use? | 5-point scale |
 | Q2 | Does the system provide all the functionality you need? | 4-point scale |
 | Q3 | How effectively does it track leads from allocation to outcome? | 5-point scale |
@@ -40,7 +40,7 @@ required, and the respondent can go back to change it.
 
 - `DEALERS_BY_PROVINCE`: the 104 dealerships from the Mahindra store locator list (`Mahindra_Store_Locator_Info.xlsx`), grouped by province. The spreadsheet has no province column, so provinces were assigned from each town name. Non-South-African outlets are under "Outside South Africa".
 - `DESIGNATIONS`: Owner, Franchise Director, Dealer Principal, Marketing Manager, Sales Manager, Sales Executive, Fleet Sales Executive. "Other" is added automatically.
-- `LMS_OPTIONS`: Auto SLM, CMS, Dash, DealersOnline, Easyquote, EGM, Heycarter, Motodata, Pinnacle. "Other" is added automatically.
+- `LMS_OPTIONS`: Auto SLM, CMS, Dash, DealersOnline, Easyquote, EGM, Heycarter, Motodata, Pinnacle. This drop-down has no "Other" option.
 - `PRIVACY_EMAIL`: contact shown in the privacy notice (default `privacy@mahindra.co.za`).
 - `SUBMIT_URL`: the endpoint that receives responses. It is set to the Pabbly Connect webhook.
   When it is empty the page runs in demo mode: the response is logged to the browser console and
