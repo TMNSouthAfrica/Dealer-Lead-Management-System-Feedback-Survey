@@ -23,7 +23,7 @@ host (GitHub Pages, Netlify, Vercel, S3, an existing web server).
 | Q3 | How effectively does it track leads from allocation to outcome? | 5-point scale |
 | Q4 | Confidence in accurate tracking and conversion reporting | 5-point scale |
 | Q5 | Biggest challenges | Multi-select (+ "Other" box; "No significant challenges" is exclusive) |
-| Q6 | Have you received formal training on the system, and when last? | Single choice |
+| Q6 | Have you received formal training on the system, and when last? | Drop-down |
 | Q7 | One improvement that would make the system more effective | Open text |
 | Q8 | Is pre-qualification of leads still beneficial? | Single choice, with branching |
 | ↳ if **Yes** | Biggest benefit of pre-qualified leads | Drop-down (+ "Other" box) |
@@ -77,10 +77,9 @@ compared across systems and dealerships:
   `q5_comment` (Reliability): always filled with the selected option, plus the typed comment on a
   negative answer, e.g. `Easy` or `Very difficult - too many clicks`
 - `has_negative_feedback` (Yes/No): any negative answer, or "No" on Q7, for easy follow-up filtering
-- `training_last_received`: the training answer (in the last 3 months / 3 to 6 months ago /
-  6 to 12 months ago / more than 12 months ago / never received formal training / not sure)
-- `training_needed` (Yes/No): "Yes" when training was more than 12 months ago, never received, or
-  not sure. Use it to find users who may have missed onboarding.
+- `training_last_received`: `No, not yet` / `Less than a year ago` / `More than a year ago`
+- `training_needed` (Yes/No): "Yes" for "No, not yet" or "More than a year ago". Use it to find
+  users who may have missed onboarding.
 - `q6_improvement`, `q7_benefit`, `q7_benefit_other`, `q7_reason_no`
 - `popia_consent` (Yes), `popia_consent_at` (timestamp)
 - `app_version`: which release of the page sent the response

@@ -3,7 +3,7 @@
 
   var CFG = window.SURVEY_CONFIG || {};
   // Bump together with the ?v= tags in index.html on every release.
-  var APP_VERSION = "2026.11.16-1";
+  var APP_VERSION = "2026.11.16-2";
   var OTHER = "Other";
 
   /* ------------------------------------------------------------------ *
@@ -68,18 +68,11 @@
     {
       // Helps suppliers find users who missed formal onboarding on the system.
       id: "training_last_received",
-      type: "single",
+      type: "select",
       title: "Have you received formal training on the system, and if so, when did you last receive it?",
-      options: [
-        "Yes, in the last 3 months",
-        "Yes, 3 to 6 months ago",
-        "Yes, 6 to 12 months ago",
-        "Yes, more than 12 months ago",
-        "No, I have never received formal training",
-        "Not sure",
-      ],
+      options: ["No, not yet", "Less than a year ago", "More than a year ago"],
       // Answers flagged as training_needed = "Yes" in the payload.
-      trainingNeeded: ["Yes, more than 12 months ago", "No, I have never received formal training", "Not sure"],
+      trainingNeeded: ["No, not yet", "More than a year ago"],
     },
     {
       id: "q6_improvement",
@@ -332,6 +325,15 @@
       var n = QUESTIONS.indexOf(s) + 1;
       html = qHeader(n, s);
       if (s.type === "single") html += optionsHtml(s, "radio");
+      if (s.type === "select") {
+        html +=
+          '<span class="select"><select name="' + s.id + '" id="' + s.id + '" aria-labelledby="qtitle">' +
+          '<option value="">Select…</option>' +
+          s.options.map(function (o) {
+            return '<option value="' + esc(o) + '"' + (o === answers[s.id] ? " selected" : "") + ">" + esc(o) + "</option>";
+          }).join("") +
+          "</select></span>";
+      }
       if (s.negative) {
         var ck = commentKey(s);
         html +=
@@ -481,7 +483,7 @@
       if (!answers.dealership) return "Please select your dealership.";
       if (!answers.lms) return "Please select the Lead Management System you use.";
     }
-    if (s.type === "single" && !answers[s.id]) return "Please choose an option to continue.";
+    if ((s.type === "single" || s.type === "select") && !answers[s.id]) return "Please choose an option to continue.";
     if (s.negative && COMMENT_REQUIRED && isNegative(s, answers[s.id]) && trim(answers[commentKey(s)]).length < 2) {
       return "Please add a short comment about what isn't working.";
     }
