@@ -23,14 +23,22 @@ host (GitHub Pages, Netlify, Vercel, S3, an existing web server).
 | Q3 | How effectively does it track leads from allocation to outcome? | 5-point scale |
 | Q4 | Confidence in accurate tracking and conversion reporting | 5-point scale |
 | Q5 | Biggest challenges | Multi-select (+ "Other" box; "No significant challenges" is exclusive) |
-| Q6 | One improvement that would make the system more effective | Open text |
-| Q7 | Is pre-qualification of leads still beneficial? | Single choice, with branching |
-
-Payload field names were kept when Q4 and Q5 swapped places, so existing Pabbly mappings still work:
-the confidence question (shown as Q4) is still sent as `q5_reporting_confidence` / `q5_score` /
-`q5_comment`, and the challenges question (shown as Q5) as `q4_challenges` / `q4_*`.
+| Q6 | Have you received formal training on the system, and when last? | Single choice |
+| Q7 | One improvement that would make the system more effective | Open text |
+| Q8 | Is pre-qualification of leads still beneficial? | Single choice, with branching |
 | ↳ if **Yes** | Biggest benefit of pre-qualified leads | Drop-down (+ "Other" box) |
 | ↳ if **No** | Why? | Open text |
+
+Payload field names don't follow the on-screen numbers, so existing Pabbly mappings keep working
+when questions move or are added:
+
+| On screen | Sent as |
+|-----------|---------|
+| Q4 Confidence in tracking and reporting | `q5_reporting_confidence`, `q5_score`, `q5_comment` |
+| Q5 Biggest challenges | `q4_challenges`, `q4_other_text`, `q4_*` flags |
+| Q6 Formal training | `training_last_received`, `training_needed` |
+| Q7 One improvement | `q6_improvement` |
+| Q8 Pre-qualification | `q7_prequalification`, `q7_score`, `q7_benefit`, `q7_benefit_other`, `q7_reason_no` |
 
 **Negative feedback comments:** a negative answer on Q1 (Difficult / Very difficult),
 Q2 (Partially / No), Q3 (Ineffectively / Very ineffectively) or Q4 (Not very confident /
@@ -69,6 +77,10 @@ compared across systems and dealerships:
   `q5_comment` (Reliability): always filled with the selected option, plus the typed comment on a
   negative answer, e.g. `Easy` or `Very difficult - too many clicks`
 - `has_negative_feedback` (Yes/No): any negative answer, or "No" on Q7, for easy follow-up filtering
+- `training_last_received`: the training answer (in the last 3 months / 3 to 6 months ago /
+  6 to 12 months ago / more than 12 months ago / never received formal training / not sure)
+- `training_needed` (Yes/No): "Yes" when training was more than 12 months ago, never received, or
+  not sure. Use it to find users who may have missed onboarding.
 - `q6_improvement`, `q7_benefit`, `q7_benefit_other`, `q7_reason_no`
 - `popia_consent` (Yes), `popia_consent_at` (timestamp)
 - `app_version`: which release of the page sent the response

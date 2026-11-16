@@ -3,7 +3,7 @@
 
   var CFG = window.SURVEY_CONFIG || {};
   // Bump together with the ?v= tags in index.html on every release.
-  var APP_VERSION = "2026.11.06-3";
+  var APP_VERSION = "2026.11.16-1";
   var OTHER = "Other";
 
   /* ------------------------------------------------------------------ *
@@ -64,6 +64,22 @@
         OTHER,
       ],
       exclusive: "No significant challenges",
+    },
+    {
+      // Helps suppliers find users who missed formal onboarding on the system.
+      id: "training_last_received",
+      type: "single",
+      title: "Have you received formal training on the system, and if so, when did you last receive it?",
+      options: [
+        "Yes, in the last 3 months",
+        "Yes, 3 to 6 months ago",
+        "Yes, 6 to 12 months ago",
+        "Yes, more than 12 months ago",
+        "No, I have never received formal training",
+        "Not sure",
+      ],
+      // Answers flagged as training_needed = "Yes" in the payload.
+      trainingNeeded: ["Yes, more than 12 months ago", "No, I have never received formal training", "Not sure"],
     },
     {
       id: "q6_improvement",
@@ -137,7 +153,7 @@
     answers.lms = params.get("lms");
   }
 
-  // Screens: intro, about you, dealership (province + dealer + LMS), the 7 questions, thank-you.
+  // Screens: intro, about you, dealership (province + dealer + LMS), the 8 questions, thank-you.
   var screens = [{ type: "intro" }, { type: "person" }, { type: "context" }]
     .concat(QUESTIONS)
     .concat([{ type: "done" }]);
@@ -550,6 +566,9 @@
     });
     rec.q5_reporting_confidence = answers.q5_reporting_confidence;
     rec.q5_score = scoreOf("q5_reporting_confidence");
+    var tq = questionById("training_last_received");
+    rec.training_last_received = answers.training_last_received;
+    rec.training_needed = tq.trainingNeeded.indexOf(answers.training_last_received) > -1 ? "Yes" : "No";
     rec.q6_improvement = answers.q6_improvement.trim();
     rec.q7_prequalification = answers.q7_prequalification;
     rec.q7_score = scoreOf("q7_prequalification");
